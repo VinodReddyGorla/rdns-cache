@@ -1,0 +1,242 @@
+---
+###################### SETTIMG HOST-NAMES TO BOTH MASTER AND SLAVES #########################
+
+
+ - name: setting hostname for master...
+   command: hostnamectl set-hostname "{{ master_hostname }}"
+   when: (hostvars[inventory_hostname]['ansible_ens33']['ipv4']['address']) == master_cache_ip
+ - name: setting hostname for master...
+   command: hostnamectl set-hostname "{{ slave_hostname }}"
+   when: (hostvars[inventory_hostname]['ansible_ens33']['ipv4']['address']) == slave_cache_ip
+
+###################### PACKE ##########################
+
+
+ - name: installing required packeges for DNS...
+   yum:
+     name: "{{ item }}"
+     state: latest
+   with_items:
+         - bind-utils
+         - bind
+
+
+####################  STOPPING NAMED SERVICE ###################
+
+
+ - name: stoping and disabling named service...
+   service:
+         name: named
+         state: stopped
+         enabled: no
+
+#################### /ETC/NAMED.CONF CONFIGURATION ###################
+
+ - name: configuring named.conf...
+   template: src=/etc/ansible/roles/dns-cachemaster-centos/inputs/named.conf.master.j2   dest=/etc/named.conf
+ - name: setting master ip in named.conf...
+   replace:
+         path: /etc/named.conf
+         regexp: master_cache_ip;
+         replace: "{{ master_cache_ip }};"
+ - name: setting slave ip in named.conf...
+   replace:
+         path: /etc/named.conf
+         regexp: slave_cache_ip;
+         replace: "{{ slave_cache_ip }};"
+ - name: setting fipa dns ips in named.conf
+   lineinfile:
+           path: /etc/named.conf
+           insertafter: '#ifpa_dns_ips'
+           line: "{{ item }}"
+   with_items: "{{ fipa_dns_ips }}" 
+ - name: setting acl for trustedlan in named.conf
+   lineinfile:
+           path: /etc/named.conf
+           insertafter: '#trustedlan_range'
+           line: "{{ item }}"
+   with_items: "{{ trustedlan_range }}"
+ - name: setting listen port ip formaster in named.conf...
+   replace:
+         path: /etc/named.conf
+         regexp: listen-on port 53 { 127.0.0.1;mastercache_ip; };
+         replace: listen-on port 53 { 127.0.0.1;{{ master_cache_ip }}; };
+   when: (hostvars[inventory_hostname]['ansible_ens33']['ipv4']['address']) == master_cache_ip
+ - name: setting listen port ipfor slave in named.conf...
+   replace:
+         path: /etc/named.conf
+         regexp: listen-on port 53 { 127.0.0.1;mastercache_ip; };
+         replace: listen-on port 53 { 127.0.0.1;{{ slave_cache_ip }}; };
+   when: (hostvars[inventory_hostname]['ansible_ens33']['ipv4']['address']) == slave_cache_ip
+ - include: /etc/ansible/roles/dns-cachemaster-centos/supported-ymls/allow-transfer1.yml
+   when: (no_of_fipas == "1")
+ - include: /etc/ansible/roles/dns-cachemaster-centos/supported-ymls/allow-transfer2.yml
+   when: (no_of_fipas == "2")
+ - include: /etc/ansible/roles/dns-cachemaster-centos/supported-ymls/allow-transfer3.yml
+   when: (no_of_fipas == "3")
+ - include: /etc/ansible/roles/dns-cachemaster-centos/supported-ymls/allow-transfer4.yml
+   when: (no_of_fipas == "4")
+ - include: /etc/ansible/roles/dns-cachemaster-centos/supported-ymls/allow-transfer5.yml
+   when: (no_of_fipas == "5")
+
+
+###################  /ETC/NAMED/NAMED.CONF.LOCAL CONFIGURATION ################
+
+ - name: creating named.conf.local filein /etc/named...
+   file:
+      path: /etc/named/named.conf.local
+      state: touch
+ - name: configuring named.conf...
+   template: src=/etc/ansible/roles/dns-cachemaster-centos/inputs/named.conf.local.master.j2   dest=/etc/named/named.conf.local
+ - name: setting trustedlan_range in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+         replace: masters { {{ fipa_dns_ip1 }}; {{ fipa_dns_ip2 }}; {{ fipa_dns_ip3 }}; };
+ - name: setting fdns2 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: fdns2
+         replace: "{{ fdns2 }}"
+   ignore_errors: yes
+ - name: setting fdns1 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: fdns1
+         replace: "{{ fdns1 }}"
+   ignore_errors: yes
+ - name: setting rdns11 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: rdns11
+         replace: "{{ rdns11 }}"
+   ignore_errors: yes
+ - name: setting rdns10 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: rdns10
+         replace: "{{ rdns10 }}"
+   ignore_errors: yes
+ - name: setting rdns9 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: rdns9
+         replace: "{{ rdns9 }}"
+   ignore_errors: yes
+ - name: setting rdns8 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: rdns8
+         replace: "{{ rdns8 }}"
+   ignore_errors: yes
+ - name: setting rdns7 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: rdns7
+         replace: "{{ rdns7 }}"
+   ignore_errors: yes
+ - name: setting rdns6 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: rdns6
+         replace: "{{ rdns6 }}"
+   ignore_errors: yes
+ - name: setting rdns5 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: rdns5
+         replace: "{{ rdns5 }}"
+   ignore_errors: yes
+ - name: setting rdns4 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: rdns4
+         replace: "{{ rdns4 }}"
+   ignore_errors: yes
+ - name: setting rdns3 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: rdns3
+         replace: "{{ rdns3 }}"
+   ignore_errors: yes
+ - name: setting rdns2 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: rdns2
+         replace: "{{ rdns2 }}"
+   ignore_errors: yes
+ - name: setting rdns1 in named.conf...
+   replace:
+         path: /etc/named/named.conf.local
+         regexp: rdns1
+         replace: "{{rdns1}}"
+   ignore_errors: yes
+ 
+
+
+############################ CREATING SLAVE DIRECTORY TO STORE DB FILES #############################
+
+
+ - name: crating slave directory in /etc/named/...
+   file:
+      path: /etc/named/slave
+      state: directory
+
+
+############################  CHANGING OWNER & GROUP TO NAMED ######################################
+
+
+ - name: changing the owner of /etc/named folder recrsely...
+   file:
+      path: /etc/named
+      owner: named
+      group: named
+      recurse: yes
+
+
+############# FIREWALLD CONFIGURATION INCLUDES ZONE CREATION/INTERFACE ADDITION/FIREWALL RULES #######
+
+
+ - include: /etc/ansible/roles/dns-cachemaster-centos/supported-ymls/firewall1.yml
+   when: (no_zones_interfaces == "1")
+   ignore_errors: yes
+ - include: /etc/ansible/roles/dns-cachemaster-centos/supported-ymls/firewall2.yml
+   when: (no_zones_interfaces == "2")
+   ignore_errors: yes
+ - include: /etc/ansible/roles/dns-cachemaster-centos/supported-ymls/firewall3.yml
+   when: (no_zones_interfaces == "3")
+   ignore_errors: yes
+ - include: /etc/ansible/roles/dns-cachemaster-centos/supported-ymls/firewall4.yml
+   when: (no_zones_interfaces == "4")
+   ignore_errors: yes
+ - include: /etc/ansible/roles/dns-cachemaster-centos/supported-ymls/firewall5.yml
+   when: (no_zones_interfaces == "5")
+   ignore_errors: yes
+
+
+########################### RESTARTING NETWORK SERVICE  #############################################
+
+
+
+ - name: restarting NetworkManager service...
+   service:
+         name: NetworkManager
+         state: restarted
+
+
+############################  STARTING AND ENABLING,RESTARTING NAMED SERVICE  #######################
+
+
+ - name: starting and enebling named service...
+   service: 
+         name: named
+         state: started
+         enabled: yes
+ - name: restarting named service...
+   service:
+         name: named 
+         state: restarted 
+   tags: named
+
+
+############################ END OF THE FILE  #######################################################
