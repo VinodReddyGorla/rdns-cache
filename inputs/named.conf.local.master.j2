@@ -1,0 +1,102 @@
+
+zone "fdns1" {
+    type slave;
+    file "/etc/named/slave/db.systemongrid.com";
+   masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };   
+
+};
+
+zone "fdns2" {
+    type slave;
+    file "/etc/named/slave/db.nam.systemongrid.com";
+   masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+
+};
+
+
+zone "rdns1.in-addr.arpa" {
+        type slave;
+        file "/etc/named/slave/db.20.0.10";
+       masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+
+};
+
+zone "rdns2.in-addr.arpa" {
+        type slave;
+        file "/etc/named/slave/db.21.0.10";
+       masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+
+};
+
+
+zone "rdns3.in-addr.arpa" {
+        type slave;
+        file "/etc/named/slave/db.22.0.10";
+       masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+
+};
+
+
+zone "rdns4.in-addr.arpa" {
+        type slave;
+        file "/etc/named/slave/db.23.0.10";
+       masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+
+};
+
+
+zone "rdns5.in-addr.arpa" {
+        type slave;
+        file "/etc/named/slave/db.30.0.10";
+       masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+
+};
+
+
+zone "rdns6.in-addr.arpa" {
+        type slave;
+        file "/etc/named/slave/db.5.0.10";
+       masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+
+};
+
+
+zone "rdns7.in-addr.arpa" {
+        type slave;
+        file "/etc/named/slave/db.6.0.10";
+       masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+
+};
+
+
+zone "rdns8.in-addr.arpa" {
+        type slave;
+    file "/etc/named/slave/db.7.0.10";
+       masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+
+};
+
+
+zone "rdns9.in-addr.arpa" {
+        type slave;
+        file "/etc/named/slave/db.8.0.10";
+       masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+
+};
+
+
+zone "rdns10.in-addr.arpa" {
+        type slave;
+        file "/etc/named/slave/db.9.0.10";
+       masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+
+};
+
+
+zone "rdns11.in-addr.arpa" {
+        type slave;
+        file "/etc/named/slave/db.95.235.192";
+       masters { fipa_dns_ip1; fipa_dns_ip2; fipa_dns_ip3; };
+
+};
+

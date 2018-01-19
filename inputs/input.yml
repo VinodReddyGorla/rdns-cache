@@ -1,0 +1,144 @@
+###################### INPUT VARIABLES  FOR DEPENDENCE CHECK #######################
+
+
+ramsize: '976'                   # in Megabyte
+cpuspeed: '2000'                 # In Megahertz
+cores: '1'                       # in numeric
+diskspace: '20'                  # in GB
+
+
+############### HOST-NAMES FOR DNS-CACHE MASTER & SLAVE  ###########################
+
+
+master_hostname: ns1.cachemaster.com
+slave_hostname: ns2.cacheslave.com
+
+
+##############  IP'S OF DNS-CACHE MASTER & SLAVE ###################################
+
+
+master_cache_ip: 192.168.32.174      # for interface ens33
+slave_cache_ip:  192.168.32.175      # for interface ens33
+master_cache_ip1: 192.168.32.174     # for interface ens37
+slave_cache_ip1:  192.168.32.175     # for interface ens37
+
+
+############## NUMBER OF FIPA NODES -> MAXIMUM NUMBER = 5 ##########################
+
+
+no_of_fipas: "3"
+
+
+###################### IP'S OF FIPA DNS SERVERS ####################################
+
+
+fipa_dns_ip1: 192.168.32.221
+fipa_dns_ip2: 192.168.32.177
+fipa_dns_ip3: 192.168.32.178
+fipa_dns_ip4: 192.168.32.179
+fipa_dns_ip5: 192.168.32.180
+
+
+##############  ACL TRUSTEDLAN RANGE FOR FIPA DNS SERVERS ##########################
+fipa_dns_ips:
+           - 192.168.32.221;       # fipa_dns_ip1
+           - 192.168.32.177;       # fipa_dns_ip2
+           - 192.168.32.178;       # fipa_dns_ip3
+
+
+##############  ACL TRUSTEDLAN RANGE ################################################
+
+
+trustedlan_range:
+               - 192.168.32.0/24;
+
+
+############## FORWARD DNS ENTRYS ##################################################
+
+
+fdns1: systemongrid.com
+fdns2: nam.systemongrid.com
+
+
+############# REVERS DNS ENTRYS ###################################################
+
+
+rdns1: 20.0.10
+rdns2: 21.0.10
+rdns3: 22.0.10
+rdns4: 23.0.10
+rdns5: 30.0.10
+rdns6: 5.0.10
+rdns7: 6.0.10
+rdns8: 7.0.10
+rdns9: 8.0.10
+rdns10: 9.0.10
+rdns11: 95.235.192
+
+
+############### NUMBER FIREWALL Z0NES AND INTERFACES -> MAXIMUM NUMBER = 5 ########
+
+
+no_zones_interfaces: "2"
+
+
+############### FIREWALL CUSTOM ZONES  ###########################################
+
+
+firewall_zone1: sdtl1                   # zone1 name
+firewall_zone2: sdtl2                   # zone2 name
+firewall_zone3: sdtl3                   # zone3 name
+firewall_zone4: sdtl4                   # zone4 name
+firewall_zone5: sdtl5                   # zone5 name
+
+
+##############  INTERFACE FOR FIREWALL ZONES  ####################################
+
+
+interface1: ens33                       # interface1 name
+interface2: ens37                       # interface2 name
+interface3: ens38                       # interface3 name
+interface4: ens39                       # interface4 name
+interface5: ens36                       # interface5 name
+
+
+############### FIREWALLD PORTS FOR ZONES  #######################################
+
+
+ports_zone1:
+    - "53/tcp"
+    - "53/udp"
+    - "953/tcp"
+    - "22/tcp"
+    - "14981/tcp"
+
+ports_zone2:
+    - "53/tcp"
+    - "53/udp"
+    - "953/tcp"
+    - "22/tcp"
+    - "14981/tcp"
+
+ports_zone3:
+    - "53/tcp"
+    - "53/udp"
+    - "953/tcp"
+    - "22/tcp"
+    - "14981/tcp"
+
+ports_zone4:
+    - "53/tcp"
+    - "53/udp"
+    - "953/tcp"
+    - "22/tcp"
+    - "14981/tcp"
+
+ports_zone5:
+    - "53/tcp"
+    - "53/udp"
+    - "953/tcp"
+    - "22/tcp"
+    - "14981/tcp"
+
+
+###################### END OF THE FILE ##############################

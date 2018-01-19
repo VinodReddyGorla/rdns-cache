@@ -1,0 +1,60 @@
+acl "trusted" {
+
+master_cache_ip;    # MASTER DNS CACHE
+slave_cache_ip;     # SLAVE DNS CACHE
+
+
+#ifpa_dns_ips
+
+};
+
+acl "trustedlan" {
+
+#trustedlan_range         # All Internal IP Space
+
+};
+
+
+
+
+options {
+	listen-on port 53 { 127.0.0.1;mastercache_ip; };
+       #listen-on-v6 port 53 { ::1; };
+	directory 	"/var/named";
+	dump-file 	"/var/named/data/cache_dump.db";
+	statistics-file "/var/named/data/named_stats.txt";
+	memstatistics-file "/var/named/data/named_mem_stats.txt";
+        allow-query             { 127.0.0.1; trusted; trustedlan; };    # Allows query from "trustedlan" ACL
+        allow-query-cache       { 127.0.0.1; trusted; trustedlan; };    # Allows query from "trustedlan" ACL
+        allow-recursion         { 127.0.0.1; trusted; trustedlan; };    # Allows recursion
+        allow-transfer { slavecache_ip; fipadns_ip1; fipadns_ip2; fipadns_ip3; };
+
+	recursion yes;
+
+	dnssec-enable yes;
+	dnssec-validation yes;
+        dnssec-lookaside auto;
+
+	bindkeys-file "/etc/named.iscdlv.key";
+
+	managed-keys-directory "/var/named/dynamic";
+
+	pid-file "/run/named/named.pid";
+	session-keyfile "/run/named/session.key";
+};
+
+logging {
+        channel default_debug {
+                file "data/named.run";
+                severity dynamic;
+        };
+};
+
+zone "." IN {
+	type hint;
+	file "named.ca";
+};
+
+include "/etc/named.rfc1912.zones";
+include "/etc/named.root.key";
+include "/etc/named/named.conf.local";
